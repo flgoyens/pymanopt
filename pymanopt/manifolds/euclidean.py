@@ -58,6 +58,7 @@ class _Euclidean(EuclideanEmbeddedSubmanifold):
 
 class Euclidean(_Euclidean):
     """
+    This is just Rn
     Euclidean manifold of shape n1 x n2 x ... x nk tensors. Useful for
     unconstrained optimization problems or for unconstrained hyperparameters,
     as part of a product manifold.

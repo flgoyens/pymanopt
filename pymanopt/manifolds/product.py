@@ -9,6 +9,9 @@ class Product(Manifold):
 
     # TODO(nkoep): Change the argument to *manifold so we can do Product(man1,
     #              man2).
+    # I think that currently the function takes a list of manifolds and does
+    #    not allow the synthax above
+
     def __init__(self, manifolds):
         for manifold in manifolds:
             if isinstance(manifold, Product):
