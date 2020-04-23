@@ -19,5 +19,9 @@ if __name__ == "__main__":
     problem = pymanopt.Problem(manifold, cost, verbosity=0)
     wopt, optlog = solver.solve(problem)
 
-    print("Optimization log:")
-    pprint.pprint(optlog)
+
+# for k, v in optlog.items:
+print(optlog.keys())
+# print(optlog['gradnorms'])
+# print("Optimization log:")
+# pprint.pprint(optlog)
