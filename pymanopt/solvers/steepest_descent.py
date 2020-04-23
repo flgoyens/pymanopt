@@ -60,7 +60,9 @@ class SteepestDescent(Solver):
         # Initialize iteration counter and timer
         iter = 0
         time0 = time.time()
-
+        # ** Display:
+        if verbosity >= 1:
+            print("Optimizing..!")
         if verbosity >= 2:
             print(" iter\t\t   cost val\t    grad. norm")
 

@@ -143,9 +143,8 @@ class TrustRegions(Solver):
             print("{:44s}f: {:+.6e}   |grad|: {:.6e}".format(
                 " ", float(fx), norm_grad))
 
-        self._start_optlog()  # TODO I NEED TO ADD:
-        # extraiterfields=['gradnorm']
-        # as an argument
+        self._start_optlog(extraiterfields=['gradnorm'])
+        # block above seems to work
 
         while True:
             # *************************
@@ -363,10 +362,9 @@ class TrustRegions(Solver):
                       "{:e}".format(fx, norm_grad))
                 print("        rho : {:e}".format(rho))
 
-            # if self._logverbosity >= 2:
-            #     self._append_optlog(iter, x, cost, gradnorm=norm_grad)
-        # TODO somewhere around here I need to happend somehting
-        # like the block above
+            if self._logverbosity >= 2:
+                self._append_optlog(k, x, fx, gradnorm=norm_grad)
+        # block above seems to work
             # ** CHECK STOPPING criteria
             stop_reason = self._check_stopping_criterion(
                 time0, gradnorm=norm_grad, iter=k)
