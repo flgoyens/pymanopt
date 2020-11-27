@@ -3,6 +3,7 @@ from copy import deepcopy
 
 from pymanopt.solvers.linesearch import LineSearchBackTracking
 from pymanopt.solvers.solver import Solver
+from pymanopt.solvers.BoxProjection import my_projection
 
 
 class SteepestDescent(Solver):
@@ -57,6 +58,16 @@ class SteepestDescent(Solver):
         if x is None:
             x = man.rand()
 
+        # ATTENTION, MODIF!
+        project = 0
+        tol_box = 0.95
+
+        if project:
+            # project X onto box where it is outside [-tol_box, tol_box]
+            temp = my_projection(x[0], tol_box)
+            # reset the entries of X that are in Omega
+            x[0] = man.make_feasible(temp)
+
         # Initialize iteration counter and timer
         iter = 0
         time0 = time.time()
@@ -89,6 +100,14 @@ class SteepestDescent(Solver):
             stepsize, x = linesearch.search(objective, man, x, desc_dir,
                                             cost, -gradnorm**2)
 
+            if project:
+                # project X onto box where it is outside [-tol_box, tol_box]
+                temp = my_projection(x[0], tol_box)
+                # reset the entries of X that are in Omega
+                x[0] = man.make_feasible(temp)
+
+            # gradnorm = man.norm(x, grad)  # it looks like this should be
+                # there but maybe not, code seems to work as desired
             stop_reason = self._check_stopping_criterion(
                 time0, stepsize=stepsize, gradnorm=gradnorm, iter=iter)
 

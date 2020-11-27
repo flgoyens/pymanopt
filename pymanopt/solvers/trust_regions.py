@@ -54,6 +54,7 @@
 import time
 
 import numpy as np
+from pymanopt.solvers.BoxProjection import my_projection
 
 from pymanopt.solvers.solver import Solver
 
@@ -124,6 +125,24 @@ class TrustRegions(Solver):
         k = 0
 
         # Initialize solution and companion measures: f(x), fgrad(x)
+        # print(x[0])
+        # temp = x[0]
+        # temp = lift.my_projection(temp, 0.9)
+        # temp = man[0].make_feasible(temp)
+        # x[0] = temp
+        # x[0] = lift.my_projection(x[0], 0.9)
+        # x[0] = x[0].make_feasible(x[0])  # this is probably wrong
+
+        # ATTENTION, MODIF!
+        # project = 0
+        # tol_box = 0.95
+        #
+        # if project:
+        #     # project X onto box where it is outside [-tol_box, tol_box]
+        #     temp = my_projection(x[0], tol_box)
+        #     # reset the entries of X that are in Omega
+        #     x[0] = man.make_feasible(temp)
+
         fx = cost(x)
         fgradx = grad(x)
         norm_grad = man.norm(x, fgradx)
@@ -208,6 +227,15 @@ class TrustRegions(Solver):
 
             # Compute the tentative next iterate (the proposal)
             x_prop = man.retr(x, eta)
+
+            #
+            # ATTENTION, MODIF!
+            #
+            # if project:
+            #     # project X onto box where it is outside [-tol_box, tol_box]
+            #     temp = my_projection(x_prop[0], tol_box)
+            #     # reset the entries of X that are in Omega
+            #     x_prop[0] = man.make_feasible(temp)
 
             # Compute the function value of the proposal
             fx_prop = cost(x_prop)
@@ -336,6 +364,7 @@ class TrustRegions(Solver):
             if model_decreased and rho > self.rho_prime:
                 # accept = True
                 accstr = "acc"
+
                 x = x_prop
                 fx = fx_prop
                 fgradx = grad(x)

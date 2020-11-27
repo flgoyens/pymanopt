@@ -91,6 +91,12 @@ class Product(Manifold):
         return _ProductTangentVector(
             [man.zerovec(X[k]) for k, man in enumerate(self._manifolds)])
 
+    def make_feasible(self, temp):
+        for k, man in enumerate(self._manifolds):
+            if k == 0:
+                temp = man.make_feasible(temp)
+        return temp
+
 
 class _ProductTangentVector(list, ndarraySequenceMixin):
     def __repr__(self):

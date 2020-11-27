@@ -107,9 +107,16 @@ class Samples(EuclideanEmbeddedSubmanifold):
         return self.proj(X, H)
 
     def rand(self):  # random point on the manifold
+        # HERE WE NEED TO INITIALIZE INSIDE -1,
         Y = rnd.randn(*self._shape)
+        # Y = lift.my_rescale(rnd.randn(*self._shape), 0.9)
         Y[self.mask] = self.samples
         return Y
+
+    def make_feasible(self, X):
+        # not sure at all how I am supposed to do this thing..
+        X[self.mask] = self.samples
+        return X
 
     def randvec(self, X):  # random vector in tangent space
         Y = self.proj(rnd.randn(*self._shape))
